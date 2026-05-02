@@ -38,7 +38,7 @@ function Board({ xIsNext, squares, onPlay }) {
     if (winner) {
       playSound(winSfx);
     } else if (isDraw) {
-      playSound(drawSfx); // Putar suara draw jika seri
+      playSound(drawSfx); 
     } else {
       playSound(clickSfx);
     }
