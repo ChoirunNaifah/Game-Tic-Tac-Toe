@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function Square({ value, onSquareClick }) {
   const isX = value === 'X';
@@ -14,8 +14,10 @@ function Square({ value, onSquareClick }) {
 }
 
 function Board({ xIsNext, squares, onPlay }) {
+  // Inisialisasi Audio dari folder public
   const clickSfx = new Audio('/click.mp3');
   const winSfx = new Audio('/win.mp3');
+  const drawSfx = new Audio('/draw.mp3'); 
 
   const playSound = (audio) => {
     audio.currentTime = 0; 
@@ -29,10 +31,14 @@ function Board({ xIsNext, squares, onPlay }) {
     const nextSquares = squares.slice();
     nextSquares[i] = xIsNext ? 'X' : 'O';
 
-    // Cek pemenang untuk menentukan suara
+    // Logika penentuan suara
     const winner = calculateWinner(nextSquares);
+    const isDraw = !winner && nextSquares.every((s) => s !== null);
+
     if (winner) {
       playSound(winSfx);
+    } else if (isDraw) {
+      playSound(drawSfx); // Putar suara draw jika seri
     } else {
       playSound(clickSfx);
     }
@@ -82,7 +88,6 @@ export default function Game() {
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
-    // Tambahkan suara klik saat navigasi history (opsional)
     new Audio('/click.mp3').play().catch(() => {});
   }
 
